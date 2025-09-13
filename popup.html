@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lottie Assets Extractor</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <img src="hello_extensions.png" alt="Extension Icon" class="icon">
+      <h1 class="title">Lottie Assets Extractor</h1>
+    </header>
+    
+    <div class="config-hint" style="font-size: 11px; color: #666; margin: 8px 0; padding: 6px; background: #f5f5f5; border-radius: 4px;">
+      💡 Console: <code>showLottieConfig()</code> to view settings, <code>configureLottieDownloads({batchSize: 3})</code> to adjust
+    </div>
+    
+    <div class="status" id="status">
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <span>Extracting Lottie assets...</span>
+      </div>
+      <div class="no-links" id="noLinks" style="display: none;">
+        <p>No Lottie assets found on this page.</p>
+        <p class="hint">Navigate to <a href="#" id="openLottieFiles">lottiefiles.com</a> or <a href="https://app.lottiefiles.com" target="_blank">app.lottiefiles.com</a> to extract assets.</p>
+      </div>
+    </div>
+    
+    <div class="links-section" id="linksSection" style="display: none;">
+      <div class="summary">
+        <span class="count-badge" id="countBadge">0</span>
+        <span class="count-text">Lottie assets found</span>
+      </div>
+      
+      <div class="actions">
+        <button id="copyAll" class="btn btn-primary">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+          </svg>
+          Copy All
+        </button>
+        <button id="copyAllRows" class="btn btn-primary-alt">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            <path d="M9 12h6"></path>
+            <path d="M9 16h6"></path>
+          </svg>
+          Copy (Rows)
+        </button>
+        <button id="downloadAll" class="btn btn-download">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+            <polyline points="7,10 12,15 17,10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download All
+        </button>
+      </div>
+      <div class="actions-secondary">
+        <button id="refreshLinks" class="btn btn-secondary">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M20.49 9A9 9 0 005.64 5.64l1.27 1.27m0 0A7 7 0 1019.64 18.36L18.37 17.09"></path>
+          </svg>
+          Refresh
+        </button>
+        <button id="viewFailedDownloads" class="btn btn-secondary" title="View failed downloads log">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          Failed Downloads
+        </button>
+      </div>
+      
+      <!-- Extension-specific buttons (dynamically generated) -->
+      <div class="extension-buttons" id="extensionButtons" style="display: none;">
+        <div class="extension-buttons-title">Copy by file type:</div>
+        <div class="extension-buttons-container" id="extensionButtonsContainer">
+          <!-- Extension buttons will be populated here -->
+        </div>
+      </div>
+      
+      <div class="links-container">
+        <div class="links-list" id="linksList">
+          <!-- Links will be populated here -->
+        </div>
+      </div>
+    </div>
+    
+    <footer class="footer">
+      <button id="openLottieFilesBtn" class="btn btn-link">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+          <polyline points="15,3 21,3 21,9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        Open LottieFiles.com
+      </button>
+    </footer>
+    
+    <div class="toast" id="toast">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20,6 9,17 4,12"></polyline>
+      </svg>
+      <span id="toastMessage">Links copied to clipboard!</span>
+    </div>
+    
+    <div class="download-progress" id="downloadProgress">
+      <div id="downloadProgressText">Downloading files...</div>
+      <div class="download-progress-bar">
+        <div class="download-progress-fill" id="downloadProgressFill"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

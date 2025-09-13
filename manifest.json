@@ -1,0 +1,41 @@
+{
+  "name": "Lottie Assets Extractor",
+  "description": "Extract Lottie animation asset links from lottiefiles.com",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": [
+    "activeTab",
+    "notifications",
+    "tabs",
+    "storage",
+    "downloads"
+  ],
+  "host_permissions": [
+    "*://lottiefiles.com/*",
+    "*://app.lottiefiles.com/*",
+    "*://assets*.lottiefiles.com/*",
+    "*://lottie.host/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "hello_extensions.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://lottiefiles.com/*",
+        "*://app.lottiefiles.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "hello_extensions.png",
+    "48": "hello_extensions.png",
+    "128": "hello_extensions.png"
+  }
+}
