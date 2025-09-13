@@ -171,6 +171,11 @@ class LottieAssetsManager {
       this.downloadAllFiles();
     });
 
+    // Clear found assets button
+    document.getElementById('clearAssets').addEventListener('click', () => {
+      this.clearFoundAssets();
+    });
+
     // Open LottieFiles button
     document.getElementById('openLottieFiles').addEventListener('click', () => {
       chrome.tabs.create({ url: 'https://lottiefiles.com' });
@@ -409,7 +414,7 @@ class LottieAssetsManager {
 
   async clearStoredData() {
     try {
-      await chrome.storage.local.remove(['lottie_extracted_links', 'lottie_extraction_timestamp']);
+      await chrome.storage.local.remove(['lottie_extracted_links', 'lottie_extraction_timestamp', 'lottie_tabs_data']);
       this.lottieLinks = [];
       this.linksByExtension.clear();
       this.updateUI();
@@ -420,6 +425,54 @@ class LottieAssetsManager {
       window.location.reload();
     } catch (error) {
       console.warn('Failed to clear storage:', error);
+    }
+  }
+
+  async clearFoundAssets() {
+    if (this.lottieLinks.length === 0) {
+      this.showToast('No assets to clear', 'warning');
+      return;
+    }
+
+    const confirmed = confirm(`Clear all ${this.lottieLinks.length} found assets?\n\nThis will:\n- Remove all assets from the current list\n- Clear cached data from storage\n- Reset the manager interface\n\nNote: This won't affect the original sources, only the found assets list.`);
+    
+    if (confirmed) {
+      try {
+        // Clear in-memory data
+        this.lottieLinks = [];
+        this.linksByExtension.clear();
+        
+        // Clear storage
+        await chrome.storage.local.remove(['lottie_extracted_links', 'lottie_extraction_timestamp', 'lottie_tabs_data']);
+        
+        // Update UI to show empty state
+        this.updateUI();
+        
+        // Clear badges from all tabs
+        const allTabs = await chrome.tabs.query({});
+        allTabs.forEach(tab => {
+          if (this.isLottieSupportedUrl(tab.url)) {
+            chrome.action.setBadgeText({ text: '', tabId: tab.id });
+          }
+        });
+        
+        // Show success message and refresh UI
+        this.showToast('All found assets cleared successfully', 'success');
+        
+        // Reset status to show tabs selection again
+        const statusElement = document.getElementById('status');
+        const controlsElement = document.getElementById('controls');
+        statusElement.style.display = 'block';
+        controlsElement.style.display = 'none';
+        
+        // Re-initialize to show tab selection
+        await this.findLottieTabsAndLoad();
+        
+        console.log('Successfully cleared all found assets');
+      } catch (error) {
+        console.error('Error clearing assets:', error);
+        this.showToast('Failed to clear assets', 'error');
+      }
     }
   }
 
