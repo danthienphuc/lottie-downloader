@@ -13,7 +13,7 @@ class LottieExtractor {
     // Set up mutation observer to detect dynamically loaded content
     this.setupObserver();
     
-    // Listen for messages from popup
+    // Listen for messages from popup and background
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request.action === 'getLottieLinks') {
         this.extractLinks();
@@ -21,14 +21,66 @@ class LottieExtractor {
           links: Array.from(this.lottieLinks),
           count: this.lottieLinks.size 
         });
+      } else if (request.action === 'getLinkCount') {
+        this.extractLinks();
+        sendResponse({ 
+          count: this.lottieLinks.size 
+        });
       }
+      return true; // Keep message channel open for async response
     });
     
     // Initial extraction and badge update
     setTimeout(() => {
       this.extractLinks();
       this.updateBadge();
+      this.saveToStorage();
     }, 2000);
+    
+    // Also save whenever new links are found
+    this.setupPeriodicSave();
+  }
+
+  setupPeriodicSave() {
+    // Save to storage every 10 seconds if there are changes
+    setInterval(() => {
+      if (this.lottieLinks.size > 0) {
+        this.saveToStorage();
+      }
+    }, 10000);
+  }
+
+  async saveToStorage() {
+    try {
+      const tabData = {
+        url: window.location.href,
+        title: document.title,
+        links: Array.from(this.lottieLinks),
+        timestamp: Date.now()
+      };
+
+      // Get existing stored data
+      const result = await chrome.storage.local.get(['lottie_tabs_data']);
+      const tabsData = result.lottie_tabs_data || {};
+      
+      // Update data for this tab
+      const tabKey = `tab_${window.location.hostname}_${Date.now()}`;
+      tabsData[tabKey] = tabData;
+      
+      // Clean old entries (older than 2 hours)
+      const twoHoursAgo = Date.now() - (2 * 60 * 60 * 1000);
+      Object.keys(tabsData).forEach(key => {
+        if (tabsData[key].timestamp < twoHoursAgo) {
+          delete tabsData[key];
+        }
+      });
+
+      // Save back to storage
+      await chrome.storage.local.set({ 'lottie_tabs_data': tabsData });
+      console.log('Saved Lottie links to storage:', this.lottieLinks.size, 'links from', window.location.hostname);
+    } catch (error) {
+      console.warn('Failed to save to storage:', error);
+    }
   }
 
   extractLinks() {
@@ -43,9 +95,12 @@ class LottieExtractor {
     // Extract from JSON-LD and script tags
     this.extractFromScripts();
     
-    // If new links found, update badge
-    if (this.lottieLinks.size !== previousCount) {
+    // If new links found, update badge and save
+    const currentCount = this.lottieLinks.size;
+    if (currentCount !== previousCount) {
       this.updateBadge();
+      this.saveToStorage(); // Save when new links found
+      console.log(`Found ${currentCount - previousCount} new Lottie links, total: ${currentCount}`);
     }
   }
 

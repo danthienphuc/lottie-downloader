@@ -1,8 +1,16 @@
-# 🔧 Cấu hình Extension Lottie Assets
+# 🔧 Cấu hình Extension Lottie Assets Manager
+
+## Tab Manager (Mới!)
+
+Extension giờ đây mở **tab manager** thay vì popup nhỏ:
+- Click extension icon → Mở tab manager trong cửa sổ mới
+- Có thể đóng tab manager, downloads vẫn tiếp tục chạy background
+- Giao diện full-page dễ sử dụng hơn
+- Tự động focus tab manager đã mở (nếu có)
 
 ## Cấu hình Download từ Console
 
-Extension hỗ trợ cấu hình động các thông số download từ DevTools Console:
+Extension hỗ trợ cấu hình động các thông số download từ DevTools Console trong tab manager:
 
 ### 📊 Xem cấu hình hiện tại:
 ```javascript

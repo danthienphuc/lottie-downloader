@@ -1,8 +1,19 @@
-# 🎪 Lottie Assets Extractor - Chrome Extension
+# 🎪 Lottie Assets Manager - Chrome Extension
 
 Chrome extension to extract and manage Lottie animation asset links from LottieFiles websites.
 
-## ✨ Features
+## ✨ New: Tab Manager Interface
+
+**No more popup!** Extension now opens a dedicated tab manager:
+- Click extension icon → Opens full-page manager in new tab  
+- **Scans all open LottieFiles tabs** - No more empty results!
+- Choose specific tabs to extract from or extract from all tabs
+- **Cached results** - Data persists for 1 hour across sessions  
+- Downloads continue running even if you close the manager tab
+- Better UI/UX with full-page layout and tab selection
+- Auto-focus existing manager tab if already open
+
+## 🔍 Features
 
 ### 🔍 Extraction
 - Automatically detects .lottie and .json files
@@ -67,12 +78,13 @@ configureLottieDownloads({batchSize: 2, maxRetries: 3, batchDelay: 2000})
 
 ## 🎯 Usage
 
-1. Visit any supported LottieFiles domain
+1. Visit any supported LottieFiles domain  
 2. Extension badge shows count of detected assets
-3. Click extension icon to open popup
-4. Use copy/download buttons as needed
-5. Check console for configuration options
-6. View failed downloads log if needed
+3. **Click extension icon to open tab manager** (new!)
+4. Use copy/download buttons in the manager tab
+5. Downloads continue even if you close the manager tab
+6. Check console in manager tab for configuration options
+7. View failed downloads log if needed
 
 ## 📁 File Structure
 
@@ -84,11 +96,17 @@ configureLottieDownloads({batchSize: 2, maxRetries: 3, batchDelay: 2000})
 
 ## 🔄 Updates
 
+v3.0.0 (Latest):
+- **NEW: Tab Manager Interface** - No more popup! Full-page manager tab
+- Downloads continue running in background after closing manager
+- Better UX with full-page layout and improved navigation
+- Existing manager tab auto-focus when clicking extension icon
+
 v2.0.0:
 - Added parallel batch downloads
 - Configurable download settings
 - Improved error handling and logging
-- Support for app.lottiefiles.com and lottie.host
+- Support for app.lottiefiles.com and lottie.host  
 - Enhanced UI with progress tracking
 
 ## 📝 Notes

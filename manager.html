@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lottie Assets Manager</title>
+  <link rel="stylesheet" href="manager.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="header-left">
+        <img src="hello_extensions.png" alt="Extension Icon" class="icon">
+        <h1 class="title">🎪 Lottie Assets Manager</h1>
+      </div>
+      <div class="header-actions">
+        <button id="openLottieFiles" class="secondary-button">
+          🌐 Open LottieFiles
+        </button>
+        <button id="failedDownloadsBtn" class="warning-button" style="display: none;">
+          ⚠️ Failed Downloads
+        </button>
+      </div>
+    </header>
+    
+    <div class="config-hint">
+      💡 Console: <code>showLottieConfig()</code> to view settings, <code>configureLottieDownloads({batchSize: 3})</code> to adjust
+    </div>
+    
+    <div class="status" id="status">
+      Loading Lottie assets...
+    </div>
+
+    <div class="controls" id="controls" style="display: none;">
+      <div class="main-actions">
+        <button id="copyAll" class="primary-button">
+          📋 Copy All
+        </button>
+        
+        <button id="copyAllRows" class="primary-button">
+          📋 Copy All (Rows)
+        </button>
+        
+        <button id="downloadAll" class="success-button">
+          📥 Download All
+        </button>
+      </div>
+
+      <div class="extension-buttons" id="extensionButtons">
+        <!-- Dynamic extension buttons will be added here -->
+      </div>
+
+      <div class="progress-container" id="progressContainer" style="display: none;">
+        <div class="progress-info">
+          <span id="progressText">Preparing downloads...</span>
+          <span id="progressCount">0/0</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="assets-section">
+      <div class="assets-header">
+        <h3>📂 Found Assets</h3>
+        <span id="assetsCount" class="assets-count">0</span>
+      </div>
+      
+      <div class="links-container" id="linksContainer">
+        <div class="no-links" id="noLinks">
+          No Lottie assets found on this page.
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script src="manager.js"></script>
+</body>
+</html>
